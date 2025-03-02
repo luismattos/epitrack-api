@@ -1,0 +1,97 @@
+/// Representa o usuário do sistema. Cada usuário gerencia seus próprios medicamentos
+/// e pode se conectar com diversos responsáveis de saúde (médicos, cuidadores, etc.).
+model User {
+  id              String              @id @default(uuid())
+  name            String
+  email           String              @unique
+  password        String
+  medications     Medication[]
+  healthProviders UserHealthProvider[]
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+/// Representa um medicamento cadastrado por um usuário. Cada medicamento pode ter
+/// registros de administração (logs) e prescrições associadas.
+model Medication {
+  id             String              @id @default(uuid())
+  name           String
+  dosage         String?
+  frequency      String?
+  user           User                @relation(fields: [userId], references: [id])
+  userId         String              @map("user_id")
+  logs           MedicationLog[]
+  prescriptions  Prescription[]
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+
+  @@map("medications")
+}
+
+/// Registra cada administração de um medicamento. Permite acompanhar o histórico de
+/// uso, registrando a data/hora em que o medicamento foi tomado e eventuais observações.
+model MedicationLog {
+  id           String      @id @default(uuid())
+  medication   Medication  @relation(fields: [medicationId], references: [id])
+  medicationId String      @map("medication_id")
+  takenAt      DateTime    @map("taken_at")
+  note         String?
+  createdAt    DateTime    @default(now()) @map("created_at")
+
+  @@map("medication_logs")
+}
+
+/// Representa uma prescrição emitida por um responsável de saúde para um medicamento específico.
+/// Armazena informações detalhadas como dosagem, frequência, instruções e a data da prescrição.
+model Prescription {
+  id               String         @id @default(uuid())
+  medication       Medication     @relation(fields: [medicationId], references: [id])
+  medicationId     String         @map("medication_id")
+  healthProvider   HealthProvider @relation(fields: [healthProviderId], references: [id])
+  healthProviderId String         @map("health_provider_id")
+  prescribedAt     DateTime       @default(now()) @map("prescribed_at")
+  instructions     String?
+  dosage           String?
+  frequency        String?
+  note             String?
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+
+  @@map("prescriptions")
+}
+
+/// Representa um profissional de saúde ou cuidador. Esse modelo pode ser associado a
+/// diversos usuários e é responsável por emitir prescrições ou monitorar o tratamento.
+model HealthProvider {
+  id             String              @id @default(uuid())
+  name           String
+  email          String              @unique
+  phone          String?
+  providerType   String?             @map("provider_type") // Exemplo: "Médico", "Cuidador", etc.
+  specialization String?
+  users          UserHealthProvider[]
+  prescriptions  Prescription[]
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+
+  @@map("health_providers")
+}
+
+/// Tabela de associação que conecta usuários a responsáveis de saúde. Permite gerenciar
+/// a integração, convites e status (ex: "pending", "accepted") entre as partes.
+model UserHealthProvider {
+  id               String         @id @default(uuid())
+  user             User           @relation(fields: [userId], references: [id])
+  userId           String         @map("user_id")
+  healthProvider   HealthProvider @relation(fields: [healthProviderId], references: [id])
+  healthProviderId String         @map("health_provider_id")
+  role             String?        // Papel do responsável no gerenciamento do usuário
+  status           String         @default("pending")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+
+  @@unique([userId, healthProviderId])
+  @@map("user_health_providers")
+}

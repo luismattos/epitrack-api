@@ -1,0 +1,217 @@
+# MVP: Mínimo Produto Viável
+
+## Release 1: MVP Essencial
+
+**Objetivo:**
+Lançar a versão mínima do produto, com os fundamentos necessários para que o usuário possa se registrar, fazer login, gerenciar seu perfil e gerenciar seus medicamentos. Essa versão entrega o core do sistema e valida o modelo de negócio.
+
+- **Auth Module:**
+  - **RegisterController:**
+    Lida com o cadastro de novos usuários, validando os dados, criptografando a senha e criando o usuário.
+  - **AuthenticateController:**
+    Gerencia o login e a geração do token JWT.
+  - **PasswordRecoveryController:**
+    Inicia o fluxo de recuperação de senha, enviando um e-mail com instruções.
+  - **TokenRenewalController:**
+    Renova o token de autenticação para garantir a continuidade da sessão.
+
+- **User Module:**
+  - **GetUserProfileController:**
+    Retorna os dados do perfil do usuário autenticado.
+  - **UpdateUserProfileController:**
+    Atualiza as informações do perfil do usuário.
+
+- **Medication Module:**
+  - **CreateMedicationController:**
+    Cria um novo registro de medicamento, associando-o ao usuário.
+  - **ListMedicationsController:**
+    Retorna a listagem dos medicamentos cadastrados pelo usuário.
+  - **GetMedicationController:**
+    Consulta os detalhes de um medicamento específico.
+  - **UpdateMedicationController:**
+    Atualiza os dados de um medicamento (ex.: dosagem, frequência).
+  - **DeleteMedicationController:**
+    Remove um medicamento do sistema.
+
+**Iterações Internas do Release 1:**
+
+1. **Iteração 1.1: Autenticação e Cadastro:**
+   Desenvolver e testar os controllers do módulo Auth.
+2. **Iteração 1.2: Gerenciamento de Perfil:**
+   Implementar e integrar os controllers do módulo User.
+3. **Iteração 1.3: CRUD de Medicamentos:**
+   Desenvolver e testar os controllers do módulo Medication.
+4. **Integração Final do Release 1:**
+   Realizar testes de integração, revisar o fluxo e lançar o MVP para feedback.
+
+---
+
+## Release 2: Registro de Uso
+
+**Objetivo:**
+Permitir que os usuários registrem e consultem o histórico de administração dos medicamentos, aumentando a rastreabilidade do tratamento.
+
+**Funcionalidades (Controllers) do Release 2:**
+
+- **Medication Log Module:**
+  - **CreateMedicationLogController:**
+    Registra um novo log de administração, recebendo data, hora e observações.
+  - **ListMedicationLogsController:**
+    Retorna o histórico de logs para um determinado medicamento.
+
+**Iterações Internas do Release 2:**
+
+1. **Iteração 2.1: Criação de Logs:**
+   Desenvolver e testar o `CreateMedicationLogController`.
+2. **Iteração 2.2: Consulta de Logs:**
+   Implementar e validar o `ListMedicationLogsController`.
+3. **Integração Final do Release 2:**
+   Integrar os novos controllers com o sistema e realizar testes de integração.
+
+---
+
+## Release 3: Notificações e Alertas
+
+**Objetivo:**
+Implementar notificações para alertar os usuários sobre eventos críticos (como horários de medicação e novas prescrições) e permitir a configuração personalizada dos alertas, aumentando o engajamento e a eficácia do tratamento.
+
+**Funcionalidades (Controllers) do Release 3:**
+
+- **Notification Module:**
+  - **ScheduleNotificationController:**
+    Agenda e dispara notificações (push, e-mail ou SMS) para eventos específicos.
+  - **GetNotificationsController:**
+    Retorna o histórico de notificações enviadas.
+  - **UpdateNotificationPreferencesController:**
+    Atualiza as configurações de notificação do usuário.
+  - *(Opcional: DeleteNotificationController, se necessário.)*
+
+**Iterações Internas do Release 3:**
+
+1. **Iteração 3.1: Agendamento e Disparo de Notificações:**
+   Desenvolver e testar o `ScheduleNotificationController`.
+2. **Iteração 3.2: Histórico e Configuração:**
+   Implementar `GetNotificationsController` e `UpdateNotificationPreferencesController`.
+3. **Integração Final do Release 3:**
+   Integrar o módulo de notificações com o restante do sistema e ajustar conforme o feedback.
+
+---
+
+## Release 4: Visualização e Monitoramento
+
+**Objetivo:**
+Oferecer uma visão consolidada do tratamento por meio de um dashboard que agrega dados dos medicamentos, logs e, eventualmente, prescrições, facilitando o monitoramento e a análise pelo usuário.
+
+**Funcionalidades (Controllers) do Release 4:**
+
+- **Dashboard Module:**
+  - **GetDashboardDataController:**
+    Agrega e retorna os dados dos módulos de medicamentos, logs (e prescrições, se houver) para uma visão centralizada.
+  - *(Opcional: GetMedicationDetailsForDashboardController para consultas detalhadas de um medicamento.)*
+
+**Iterações Internas do Release 4:**
+
+1. **Iteração 4.1: Agregação de Dados:**
+   Desenvolver e testar o `GetDashboardDataController`.
+2. **Iteração 4.2: Testes e Ajustes de Usabilidade:**
+   Validar a apresentação dos dados e ajustar a interface conforme feedback.
+3. **Integração Final do Release 4:**
+   Lançar a versão com o dashboard consolidado e monitorar a experiência do usuário.
+
+---
+
+## Release 5: Integração com Profissionais de Saúde
+
+**Objetivo:**
+Permitir que os usuários se conectem com profissionais de saúde, possibilitando a emissão e gerenciamento de prescrições, além da associação (convite/aceitação) entre usuários e especialistas. Essa funcionalidade é adicionada ao final para validar o modelo de negócio com o core do sistema antes de expandir para integrações mais complexas.
+
+**Funcionalidades (Controllers) do Release 5:**
+
+- **Prescription Module:**
+  - **CreatePrescriptionController:**
+    Cria uma nova prescrição para um medicamento.
+  - **ListPrescriptionsController:**
+    Lista todas as prescrições associadas.
+  - **GetPrescriptionController:**
+    Consulta os detalhes de uma prescrição específica.
+  - **UpdatePrescriptionController:**
+    Atualiza os dados de uma prescrição.
+  - **DeletePrescriptionController:**
+    Remove uma prescrição.
+
+- **Health Provider Module:**
+  - **RegisterHealthProviderController:**
+    Registra um novo profissional de saúde.
+  - **ListHealthProvidersController:**
+    Lista os profissionais de saúde cadastrados.
+  - **GetHealthProviderController:**
+    Retorna os detalhes de um profissional específico.
+  - **UpdateHealthProviderController:**
+    Atualiza as informações de um profissional.
+  - *(Opcional: DeleteHealthProviderController, se aplicável.)*
+
+- **User Health Provider Module:**
+  - **SendInvitationController:**
+    Envia um convite para associação entre usuário e profissional.
+  - **AcceptInvitationController:**
+    Processa a aceitação do convite.
+  - **DeclineInvitationController:**
+    Processa a recusa do convite.
+  - **GetAssociationController:**
+    Consulta o status da associação entre usuário e profissional.
+
+**Iterações Internas do Release 5:**
+
+1. **Iteração 5.1: Prescrições:**
+   Desenvolver e testar os controllers do Prescription Module.
+2. **Iteração 5.2: Cadastro e Consulta de Profissionais:**
+   Implementar os controllers do Health Provider Module.
+3. **Iteração 5.3: Associação Usuário-Profissional:**
+   Desenvolver os controllers do User Health Provider Module.
+4. **Integração Final do Release 5:**
+   Integrar todas as funcionalidades, testar os fluxos de conexão e emissão de prescrições, e lançar a versão final com integração de profissionais.
+
+---
+
+## Problema com o @prisma/client
+
+Esse erro geralmente ocorre quando o pacote `@prisma/client` não está instalado corretamente ou o cliente não foi gerado. Aqui estão algumas verificações e passos para resolver o problema:
+
+1. **Verifique a instalação:**
+   Certifique-se de que o pacote está instalado. No terminal, execute:
+
+   ```bash
+   npm install @prisma/client
+   ```
+
+   ou, se usar pnpm:
+
+   ```bash
+   pnpm add @prisma/client
+   ```
+
+2. **Gere o cliente do Prisma:**
+   Depois de instalar, execute o comando:
+
+   ```bash
+   npx prisma generate
+   ```
+
+   Esse comando gera os arquivos do cliente com base no seu schema, permitindo o uso do `PrismaClient`.
+
+3. **Verifique o seu package.json:**
+   Confirme se a dependência `@prisma/client` está listada no seu package.json.
+
+4. **Limpe o cache do TypeScript/IDE:**
+   Às vezes, o TypeScript ou sua IDE pode precisar de um reinício para reconhecer as novas definições de tipo.
+
+5. **Verifique a versão:**
+   Certifique-se de estar usando uma versão compatível do `@prisma/client`. O import correto é:
+
+   ```typescript
+   import { PrismaClient } from '@prisma/client';
+   ```
+
+   Se a versão estiver desatualizada ou houver conflito, tente atualizar.
+
+6. Se for preciso regerar as tabelas: `pnpm prisma migrate deploy`

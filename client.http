@@ -32,3 +32,10 @@ Authorization: Bearer {{authToken}}
 {
   "name": "Dipirona"
 }
+
+###
+
+# @name medications
+GET {{baseUrl}}/medications?page=1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
